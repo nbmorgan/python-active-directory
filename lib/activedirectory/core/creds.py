@@ -75,7 +75,7 @@ class Creds(object):
         """Load credentials from the OS."""
         ccache = krb5.cc_default()
         if not os.access(ccache, os.R_OK):
-            raise Error, 'No ccache found'
+            raise Error('No ccache found')
         self.m_principal = krb5.cc_get_principal(ccache)
         self._init_ccache()
         krb5.cc_copy_creds(ccache, self.m_ccache)
@@ -112,8 +112,8 @@ class Creds(object):
                 krb5.get_init_creds_password(principal, password)
             else:
                 krb5.get_init_creds_keytab(principal, keytab)
-        except krb5.Error, err:
-            raise Error, str(err)
+        except krb5.Error as err:
+            raise Error(str(err))
         self.m_principal = principal
 
     def release(self):
@@ -191,7 +191,7 @@ class Creds(object):
         result = locator.locate_many(domain)
         if not result:
             m = 'No suitable domain controllers found for %s' % domain
-            raise Error, m
+            raise Error(m)
         self.m_domains[domain] = list(result)
         # Re-init every time
         self._init_config()

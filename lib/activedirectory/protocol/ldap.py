@@ -188,9 +188,9 @@ class Client(object):
                 typ = asn1.TypePrimitive
         if isinstance(id, tuple):
             if tag[0] not in id:
-                raise Error, 'LDAP syntax error'
+                raise Error('LDAP syntax error')
         elif id is not None:
             if tag[0] != id:
-                raise Error, 'LDAP syntax error'
+                raise Error('LDAP syntax error')
         if tag[1] != typ or tag[2] != cls:
-            raise Error, 'LDAP syntax error'
+            raise Error('LDAP syntax error')

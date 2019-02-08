@@ -14,3 +14,5 @@ dist/
 pip-log.txt
 .DS_Store
 *swp
+.ipynb_checkpoints
+*.so

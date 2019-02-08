@@ -8,8 +8,10 @@
  */
 
 #include <Python.h>
+//#if PY_MAJOR_VERSION >= 3
+#include <bytesobject.h>
+//#endif
 #include <krb5.h>
-
 
 static PyObject *k5_error;
 

@@ -39,9 +39,9 @@ class TestDecoder(BaseTest):
 
     def test_uint32_long(self):
         s = '\x00\x00\x00\xff'
-        assert self.decode_uint32(s, 0) == (0xff000000L, 4)
+        assert self.decode_uint32(s, 0) == (0xff000000, 4)
         s = '\xff\xff\xff\xff'
-        assert self.decode_uint32(s, 0) == (0xffffffffL, 4)
+        assert self.decode_uint32(s, 0) == (0xffffffff, 4)
 
     def test_error_uint32_null_input(self):
         s = ''
@@ -175,11 +175,11 @@ class TestDecoder(BaseTest):
     def test_error_io_type(self):
         d = netlogon.Decoder()
         assert_raises(netlogon.Error, d.start, 1)
-        assert_raises(netlogon.Error, d.start, 1L)
+        assert_raises(netlogon.Error, d.start, 1)
         assert_raises(netlogon.Error, d.start, ())
         assert_raises(netlogon.Error, d.start, [])
         assert_raises(netlogon.Error, d.start, {})
-        assert_raises(netlogon.Error, d.start, u'test')
+        assert_raises(netlogon.Error, d.start, 'test')
 
     def test_real_packet(self):
         fname = os.path.join(self.basedir(),

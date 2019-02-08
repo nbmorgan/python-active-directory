@@ -73,7 +73,7 @@ class TestLocator(BaseTest):
         for i in range(n):
             res = loc._order_dns_srv(srv)
             count[res[0].weight] += 1
-        print count
+        print(count)
 
         def stddev(n, p):
             # standard deviation of binomial distribution

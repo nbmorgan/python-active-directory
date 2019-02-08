@@ -10,7 +10,7 @@
 def _singleton(cls, *args, **kwargs):
     """Return the single instance of a class, creating it if it does not exist."""
     if not hasattr(cls, 'instance') or cls.instance is None:
-        obj = apply(cls, args, kwargs)
+        obj = cls(*args, **kwargs)
         cls.instance = obj
     return cls.instance
 

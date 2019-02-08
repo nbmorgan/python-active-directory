@@ -249,7 +249,7 @@ class TestADClient(BaseTest):
         result = client.search('(sAMAccountName=test-usr)')
         assert len(result) == 1
         dn, attrs = result[0]
-        assert attrs.has_key('memberOf')
+        assert 'memberOf' in attrs
         assert len(attrs['memberOf']) == 2000
         self._delete_obj(client, user)
         for group in groups:
@@ -283,8 +283,8 @@ class TestADClient(BaseTest):
         result = client.search(base='', scope='base', server=server)
         assert len(result) == 1
         dns, attrs = result[0]
-        assert attrs.has_key('supportedControl')
-        assert attrs.has_key('supportedSASLMechanisms')
+        assert 'supportedControl' in attrs
+        assert 'supportedSASLMechanisms' in attrs
 
     def test_search_server(self):
         self.require(ad_user=True)

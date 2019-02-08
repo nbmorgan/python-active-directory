@@ -12,4 +12,4 @@ client = Client(domain)
 users = client.search('(objectClass=user)')
 for dn,attrs in users:
     name = attrs['sAMAccountName'][0]
-    print '-> %s' % name
+    print('-> %s' % name)

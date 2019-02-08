@@ -67,7 +67,7 @@ class Locator(object):
         servers = self.locate_many(domain, role, maxservers=1)
         if not servers:
             m = 'Could not locate domain controller'
-            raise ADError, m
+            raise ADError(m)
         return servers[0]
 
     def locate_many(self, domain, role=None, maxservers=None):
@@ -84,7 +84,7 @@ class Locator(object):
         if maxservers is None:
             maxservers = self._maxservers
         if role not in ('dc', 'gc', 'pdc'):
-            raise ValueError, 'Role should be one of "dc", "gc" or "pdc".'
+            raise ValueError('Role should be one of "dc", "gc" or "pdc".')
         if role == 'pdc':
             maxservers = 1
         domain = domain.upper()
@@ -148,7 +148,7 @@ class Locator(object):
         self.m_logger.debug('DNS query %s type %s' % (query, type))
         try:
             answer = dns.resolver.query(query, type)
-        except dns.exception.DNSException, err:
+        except dns.exception.DNSException as err:
             answer = []
             self.m_logger.error('DNS query error: %s' % (str(err) or err.__doc__))
         else:
@@ -181,7 +181,7 @@ class Locator(object):
                 sites[reply.client_site] += 1
             except KeyError:
                 sites[reply.client_site] = 1
-        sites = [ (value, key) for key,value in sites.items() ]
+        sites = [ (value, key) for key,value in list(sites.items()) ]
         sites.sort()
         self.m_logger.debug('site detected as %s' % sites[-1][1])
         return sites[0][1]
