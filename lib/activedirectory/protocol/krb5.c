@@ -10,6 +10,7 @@
 #include <Python.h>
 //#if PY_MAJOR_VERSION >= 3
 #include <bytesobject.h>
+#define PyString_FromString PyBytes_FromString
 //#endif
 #include <krb5.h>
 
@@ -389,7 +390,8 @@ k5_c_valid_enctype(PyObject *self, PyObject *args)
 }
 
 
-static PyMethodDef k5_methods[] = 
+/*
+static PyMethodDef k5_methods[] =
 {
     { "get_init_creds_password",
             (PyCFunction) k5_get_init_creds_password, METH_VARARGS },
@@ -412,7 +414,7 @@ static PyMethodDef k5_methods[] =
 
 
 void
-initkrb5(void)
+old_initkrb5(void)
 {
     PyObject *module, *dict;
 
@@ -424,4 +426,111 @@ initkrb5(void)
     dict = PyModule_GetDict(module);
     k5_error = PyErr_NewException("freeadi.protocol.krb5.Error", NULL, NULL);
     PyDict_SetItemString(dict, "Error", k5_error);
+}
+*/
+
+//----------------------
+struct module_state {
+    PyObject *error;
+};
+
+#if PY_MAJOR_VERSION >= 3
+#define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
+#else
+#define GETSTATE(m) (&_state)
+static struct module_state _state;
+#endif
+
+static PyObject *
+error_out(PyObject *m) {
+    struct module_state *st = GETSTATE(m);
+    PyErr_SetString(st->error, "something bad happened");
+    return NULL;
+}
+
+static PyMethodDef krb5_methods[] = {
+    { "get_init_creds_password",
+            (PyCFunction) k5_get_init_creds_password, METH_VARARGS },
+    { "get_init_creds_keytab",
+            (PyCFunction) k5_get_init_creds_keytab, METH_VARARGS },
+    { "set_password",
+            (PyCFunction) k5_set_password, METH_VARARGS },
+    { "change_password",
+            (PyCFunction) k5_change_password, METH_VARARGS },
+    { "cc_default",
+	    (PyCFunction) k5_cc_default, METH_VARARGS },
+    { "cc_copy_creds",
+	    (PyCFunction) k5_cc_copy_creds, METH_VARARGS },
+    { "cc_get_principal",
+	    (PyCFunction) k5_cc_get_principal, METH_VARARGS },
+    { "c_valid_enctype",
+            (PyCFunction) k5_c_valid_enctype, METH_VARARGS },
+    { NULL, NULL }
+};
+
+#if PY_MAJOR_VERSION >= 3
+
+static int krb5_traverse(PyObject *m, visitproc visit, void *arg) {
+    Py_VISIT(GETSTATE(m)->error);
+    return 0;
+}
+
+static int krb5_clear(PyObject *m) {
+    Py_CLEAR(GETSTATE(m)->error);
+    return 0;
+}
+
+static struct PyModuleDef moduledef = {
+        PyModuleDef_HEAD_INIT,
+        "krb5",
+        NULL,
+        sizeof(struct module_state),
+        krb5_methods,
+        NULL,
+        krb5_traverse,
+        krb5_clear,
+        NULL
+};
+
+#define INITERROR return NULL
+
+PyMODINIT_FUNC
+PyInit_krb5(void)
+
+#else
+#define INITERROR return
+
+void
+initkrb5(void)
+#endif
+{
+    PyObject *module, *dict;
+
+#if !defined(__APPLE__) || !defined(__MACH__)
+    initialize_krb5_error_table();
+#endif
+
+
+#if PY_MAJOR_VERSION >= 3
+    module = PyModule_Create(&moduledef);
+#else
+    *module = Py_InitModule("krb5", krb5_methods);
+#endif
+
+    dict = PyModule_GetDict(module);
+    k5_error = PyErr_NewException("freeadi.protocol.krb5.Error", NULL, NULL);
+
+    if (module == NULL)
+        INITERROR;
+    struct module_state *st = GETSTATE(module);
+
+    st->error = PyErr_NewException("krb5.Error", NULL, NULL);
+    if (st->error == NULL) {
+        Py_DECREF(module);
+        INITERROR;
+    }
+
+#if PY_MAJOR_VERSION >= 3
+    return module;
+#endif
 }

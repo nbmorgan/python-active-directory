@@ -16,3 +16,4 @@ pip-log.txt
 *swp
 .ipynb_checkpoints
 *.so
+test.conf

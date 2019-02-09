@@ -27,11 +27,11 @@ class BaseTest(object):
     @classmethod
     def setup_class(cls):
         config = ConfigParser()
-        fname = os.environ.get('FREEADI_TEST_CONFIG')
+        fname = os.environ.get('TEST_CONF_NAME')
         if fname is None:
             raise Error('Python-AD test configuration file not specified.')
         if not os.access(fname, os.R_OK):
-            raise Error('Python-AD test configuration file does not exist.')
+            raise Error('Python-AD test configuration file does not exist.'+os.getcwd()+" "+fname)
         config.read(fname)
         cls.c_config = config
         cls.c_basedir = os.path.dirname(fname)

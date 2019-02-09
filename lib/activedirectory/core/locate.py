@@ -189,7 +189,8 @@ class Locator(object):
     def _order_dns_srv(self, answer):
         """Order the results of a DNS SRV query."""
         answer = list(answer)
-        answer.sort(lambda x,y: x.priority - y.priority)
+        #old sort answer.sort(lambda x,y: x.priority - y.priority)
+        answer.sort(key=lambda x: x.priority)
         result = []
         for i in range(len(answer)):
             if i == 0:
