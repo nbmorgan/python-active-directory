@@ -170,7 +170,7 @@ class Locator(object):
                 netlogon.query(addr, domain)
             replies += netlogon.call()
             self.m_logger.debug('%d replies' % len(replies))
-            if replies >= 3:
+            if len(replies) >= 3:
                 break
         if not replies:
             self.m_logger.error('could not detect site')
@@ -303,9 +303,12 @@ class Locator(object):
                 local.append(reply)
             else:
                 remote.append(reply)
-        local.sort(lambda x,y: cmp(addresses.index((x.q_hostname, x.q_port)),
-                                   addresses.index((y.q_hostname, y.q_port))))
-        remote.sort(lambda x,y: cmp(x.q_timing, y.q_timing))
+#        local.sort(lambda x,y: cmp(addresses.index((x.q_hostname, x.q_port)),
+#                                  addresses.index((y.q_hostname, y.q_port))))
+#        remote.sort(lambda x,y: cmp(x.q_timing, y.q_timing))
+        local.sort(key = lambda x: addresses.index((x.q_hostname, x.q_port)))
+        remote.sort(key = lambda x: x.q_timing)
+
         self.m_logger.debug('Local DCs: %s' % ', '.join(['%s:%s' %
                                 (x.q_hostname, x.q_port) for x in local]))
         self.m_logger.debug('Remote DCs: %s' % ', '.join(['%s:%s' %

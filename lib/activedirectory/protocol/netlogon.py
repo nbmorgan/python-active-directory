@@ -228,7 +228,7 @@ class Client(object):
             domain = self.m_queries[addr][2]
             msgid = self._create_message_id()
             self.m_queries[addr][3] = msgid
-            packet = self._create_netlogon_query(domain, msgid)
+            packet = bytearray(self._create_netlogon_query(domain, msgid), 'utf8')
             self.m_socket.sendto(packet, 0, addr)
 
     def _wait_for_replies(self, timeout):
