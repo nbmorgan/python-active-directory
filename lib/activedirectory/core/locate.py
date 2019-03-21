@@ -6,6 +6,7 @@
 # Python-AD is copyright (c) 2007 by the Python-AD authors. See the file
 # "AUTHORS" for a complete overview.
 
+from __future__ import absolute_import
 import time
 import random
 import logging
@@ -19,6 +20,7 @@ from ..protocol import netlogon
 from ..protocol.netlogon import Client as NetlogonClient
 from .exception import Error as ADError
 from ..util import compat
+from six.moves import range
 
 
 LDAP_PORT = 389
@@ -189,7 +191,6 @@ class Locator(object):
     def _order_dns_srv(self, answer):
         """Order the results of a DNS SRV query."""
         answer = list(answer)
-        #old sort answer.sort(lambda x,y: x.priority - y.priority)
         answer.sort(key=lambda x: x.priority)
         result = []
         for i in range(len(answer)):
@@ -303,12 +304,8 @@ class Locator(object):
                 local.append(reply)
             else:
                 remote.append(reply)
-#        local.sort(lambda x,y: cmp(addresses.index((x.q_hostname, x.q_port)),
-#                                  addresses.index((y.q_hostname, y.q_port))))
-#        remote.sort(lambda x,y: cmp(x.q_timing, y.q_timing))
-        local.sort(key = lambda x: addresses.index((x.q_hostname, x.q_port)))
-        remote.sort(key = lambda x: x.q_timing)
-
+        local.sort(key=lambda a: a.index((a.q_hostname, a.q_port)))
+        remote.sort(key=lambda a: a.q_timing)
         self.m_logger.debug('Local DCs: %s' % ', '.join(['%s:%s' %
                                 (x.q_hostname, x.q_port) for x in local]))
         self.m_logger.debug('Remote DCs: %s' % ', '.join(['%s:%s' %

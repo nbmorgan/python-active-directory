@@ -2,10 +2,11 @@ dist/
 /build
 /doc/html
 /ldapfilter_tab.py
+.eggs/
 *.egg-info
 /lib/*.egg-info
 /lib/*.egg
-/lib/activedirectory/protocol/krb5.so
+/lib/activedirectory/protocol/*.so
 *.pyc
 *.log
 *.egg
@@ -17,3 +18,7 @@ pip-log.txt
 .ipynb_checkpoints
 *.so
 test.conf
+.python-version
+.tox
+venv/
+test.conf.atl

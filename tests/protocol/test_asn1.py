@@ -6,8 +6,10 @@
 # Python-AD is copyright (c) 2007-2008 by the Python-AD authors. See the
 # file "AUTHORS" for a complete overview.
 
+from __future__ import absolute_import
 from activedirectory.protocol import asn1
-from nose.tools import assert_raises
+
+from ..base import assert_raises
 
 
 class TestEncoder(object):

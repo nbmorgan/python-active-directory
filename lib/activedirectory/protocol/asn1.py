@@ -6,6 +6,11 @@
 # Python-AD is copyright (c) 2007-2008 by the Python-AD authors. See the
 # file "AUTHORS" for a complete overview.
 
+from __future__ import absolute_import
+import re
+import six
+from six.moves import map
+from six.moves import range
 Boolean = 0x01
 Integer = 0x02
 OctetString = 0x04
@@ -22,8 +27,6 @@ ClassUniversal = 0x00
 ClassApplication = 0x40
 ClassContext = 0x80
 ClassPrivate = 0xc0
-
-import re
 
 
 class Error(Exception):
@@ -66,9 +69,9 @@ class Encoder(object):
         if self.m_stack is None:
             raise Error('Encoder not initialized. Call start() first.')
         if nr is None:
-            if isinstance(value, int) or isinstance(value, int):
+            if isinstance(value, six.integer_types):
                 nr = Integer
-            elif isinstance(value, str) or isinstance(value, str):
+            elif isinstance(value, six.string_types):
                 nr = OctetString
             elif value is None:
                 nr = Null
@@ -204,7 +207,7 @@ class Encoder(object):
         """Encode a Null value."""
         return ''
 
-    _re_oid = re.compile('^[0-9]+(\.[0-9]+)+$')
+    _re_oid = re.compile(r'^[0-9]+(\.[0-9]+)+$')
 
     def _encode_object_identifier(self, oid):
         """Encode an object identifier."""
