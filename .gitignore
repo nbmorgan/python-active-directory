@@ -19,3 +19,4 @@ pip-log.txt
 .tox
 venv/
 test.conf.atl
+.ipynb_checkpoints/
