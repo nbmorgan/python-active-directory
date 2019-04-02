@@ -18,5 +18,6 @@ pip-log.txt
 .python-version
 .tox
 venv/
+.venv/
 test.conf.atl
 .ipynb_checkpoints/
