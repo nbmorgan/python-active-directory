@@ -20,4 +20,5 @@ pip-log.txt
 venv/
 .venv/
 test.conf.atl
+test.conf
 .ipynb_checkpoints/
