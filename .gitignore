@@ -15,10 +15,10 @@ dist/
 pip-log.txt
 .DS_Store
 *swp
-.ipynb_checkpoints
-*.so
-test.conf
 .python-version
 .tox
 venv/
+.venv/
 test.conf.atl
+test.conf
+.ipynb_checkpoints/
