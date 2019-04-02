@@ -399,9 +399,11 @@ k5_c_valid_enctype(PyObject *self, PyObject *args)
     return ret;
 }
 
+/*
 struct module_state {
     PyObject *error;
 };
+
 
 #if PY_MAJOR_VERSION >= 3
 #define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
@@ -411,7 +413,6 @@ static struct module_state _state;
 #endif
 
 
-/*
 static PyMethodDef k5_methods[] =
 {
     { "get_init_creds_password",

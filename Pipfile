@@ -8,6 +8,7 @@ verify_ssl = true
 [packages]
 pytest = "*"
 pexpect = "*"
+nose = "*"
 
 [requires]
 python_version = "3.6"
